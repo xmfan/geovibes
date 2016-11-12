@@ -142,6 +142,8 @@ class Processor(object):
             for line in f:
                 cities.add(line.strip())
         return cities
+    
+    
 
     def writeToFile(self, news):
         with self.lock:
