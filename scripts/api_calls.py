@@ -59,25 +59,25 @@ KEY PHRASES:
 
 [{u'keyPhrases': [u'Spectacles', u'bright yellow vending machine', u'sale', u'soda', u'Los Angeles', u'camera glasses', u'company', u'Thursday', u'vending machines', u'sandwich'], u'id': u'1'}]
 '''
-#headers = {'Ocp-Apim-Subscription-Key':'782e68122d8742c091f6dee73fc2d270'}
-#
-#r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/', headers=headers)
-#print r.content
-#
 
-headers = {'Ocp-Apim-Subscription-Key':'7b20e9c1ffa8470cab2e3b6245148cf6',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-        }
-payload = {
-    "documents": [
-        {
-            "language": "en",
-            "id": "1",
-            "text": "What do a sandwich, soda and Spectacles have in common? Los Angeles You can buy all three from vending machines. Spectacles - the camera glasses from the company Okalitsa Balatniki formerly known as Snapchat — went up for sale in a bright yellow vending machine on Thursday"
-        }
-     ]
-}
+headers = {'Ocp-Apim-Subscription-Key':'782e68122d8742c091f6dee73fc2d270'}
 
-r = requests.post('https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases', json = payload, headers=headers)
-print r.json()['documents']
+r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/', headers=headers)
+print len(r.json()['value'])
+
+#headers = {'Ocp-Apim-Subscription-Key':'7b20e9c1ffa8470cab2e3b6245148cf6',
+#        'Content-Type': 'application/json',
+#        'Accept': 'application/json'
+#        }
+#payload = {
+#    "documents": [
+#        {
+#            "language": "en",
+#            "id": "1",
+#            "text": "What do a sandwich, soda and Spectacles have in common? Los Angeles You can buy all three from vending machines. Spectacles - the camera glasses from the company Okalitsa Balatniki formerly known as Snapchat — went up for sale in a bright yellow vending machine on Thursday"
+#        }
+#     ]
+#}
+#
+#r = requests.post('https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases', json = payload, headers=headers)
+#print r.json()['documents']
