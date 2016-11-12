@@ -7,4 +7,4 @@ with open('worldcitiespop.txt', 'rb') as citiesfile:
             citiesAndSizes[row[2]] = (row[4], row[5], row[6])
 with open('cities.txt', 'w') as f:
     for city, coords in citiesAndSizes.items:
-        f.write(city + ’\t’ + coords[1] + ’\t’ + coords[2] + ‘\n’)
+        f.write(city + ’,’ + coords[1] + ’,’ + coords[2] + ‘\n’)
