@@ -1,5 +1,5 @@
 <!--Example: https://github.com/pleerock/ng2-popover -->
-<button *ngFor="let el of example" popover="content to be shown in the popover"
+<!--<button *ngFor="let el of example" popover="content to be shown in the popover"
     popoverTitle="Popover header"
     popoverPlacement="top"
     [popoverOnHover]="false"
@@ -8,4 +8,18 @@
     [popoverDisabled]="false"
     [popoverAnimation]="true">
   {{el}}
-</button>
+</button>-->
+
+<div *ngFor="let el of example">
+  <popover-content #myPopover 
+                  title="Popover title" 
+                  placement="left"
+                  [animation]="true" 
+                  [closeOnClickOutside]="true" >
+      <b>Very</b> <span style="color: #C21F39">Dynamic</span> <span style="color: #00b3ee">Reusable</span>
+      <b><i><span style="color: #ffc520">Popover With</span></i></b> <small>Html support</small>.
+  </popover-content>
+
+  <button [popover]="myPopover">element on which this popover is applied.</button>
+</div>
+
