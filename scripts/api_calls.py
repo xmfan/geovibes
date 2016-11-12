@@ -60,10 +60,10 @@ KEY PHRASES:
 [{u'keyPhrases': [u'Spectacles', u'bright yellow vending machine', u'sale', u'soda', u'Los Angeles', u'camera glasses', u'company', u'Thursday', u'vending machines', u'sandwich'], u'id': u'1'}]
 '''
 
-headers = {'Ocp-Apim-Subscription-Key':'782e68122d8742c091f6dee73fc2d270'}
-
-r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/', headers=headers)
-print len(r.json()['value'])
+#headers = {'Ocp-Apim-Subscription-Key':'782e68122d8742c091f6dee73fc2d270'}
+#
+#r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/', headers=headers)
+#print len(r.json()['value'])
 
 #headers = {'Ocp-Apim-Subscription-Key':'7b20e9c1ffa8470cab2e3b6245148cf6',
 #        'Content-Type': 'application/json',
@@ -81,3 +81,5 @@ print len(r.json()['value'])
 #
 #r = requests.post('https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases', json = payload, headers=headers)
 #print r.json()['documents']
+r = requests.get('http://127.0.0.1:5000/events')
+print r.content
