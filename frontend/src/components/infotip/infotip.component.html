@@ -1,0 +1,11 @@
+<!--Example: https://github.com/pleerock/ng2-popover -->
+<button *ngFor="let el of example" popover="content to be shown in the popover"
+    popoverTitle="Popover header"
+    popoverPlacement="top"
+    [popoverOnHover]="false"
+    [popoverCloseOnClickOutside]="true"
+    [popoverCloseOnMouseOutside]="false"
+    [popoverDisabled]="false"
+    [popoverAnimation]="true">
+  {{el}}
+</button>
