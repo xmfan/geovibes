@@ -1,9 +1,10 @@
 import csv
-cities = set()
+citiesAndSizes = {}
 with open('worldcitiespop.txt', 'rb') as citiesfile:
     reader = csv.reader(citiesfile, delimiter=',')
     for row in reader:
-        cities.add(row[2])
+        if row[2] not in citiesAndSizes or row[4] > (citiesAndSizes[row[2]])[0]
+            citiesAndSizes[row[2]] = (row[4], row[5], row[6])
 with open('cities.txt', 'w') as f:
-    for city in cities:
-        f.write(city+'\n')
+    for city, coords in citiesAndSizes.items:
+        f.write(city + ’\t’ + coords[1] + ’\t’ + coords[2] + ‘\n’)
