@@ -25,7 +25,7 @@ class CalcThread(Thread):
     def run(self):
         while True:
             self.processor.calculate()
-            time.sleep(10)
+            time.sleep(1000)
 
 class Processor(object):
     '''
@@ -47,6 +47,7 @@ class Processor(object):
         self.lock = lock
         self.code_to_countries = self.getCountriesFromFile()
         self.code_to_coords = self.getCoordsFromFile()
+        self.codecity_to_coords = self.getCityCoordsFromFile()
 
         self.countryList = [
                 'us',
@@ -58,6 +59,59 @@ class Processor(object):
                 'ph',
                 'jp'
         ]
+        self.cityList = [
+            {'city': 'New York', 'code': 'us'},
+            {'city': 'Toronto', 'code': 'ca'},
+            {'city': 'Beijing', 'code': 'cn'},
+            {'city': 'Berlin', 'code': 'de'},
+            {'city': 'Montreal', 'code': 'ca'},
+            {'city': 'Vancouver', 'code': 'ca'},
+            {'city': 'Winnipeg', 'code': 'ca'},
+            {'city': 'San Francisco', 'code': 'us'},
+            {'city': 'Miami', 'code': 'us'},
+            {'city': 'Seattle', 'code': 'us'},
+            {'city': 'Mexicanos', 'code': 'mx'},
+            {'city': 'Panama City', 'code': 'pa'},
+            {'city': 'Buenos Aires', 'code': 'ar'},
+            {'city': 'Santiago', 'code': 'cl'},
+            {'city': 'London', 'code': 'gb'},
+            {'city': 'Madrid', 'code': 'es'},
+            {'city': 'Tripoli', 'code': 'ly'},
+            {'city': 'Cape Town', 'code': 'za'},
+            {'city': 'Cairo', 'code': 'eg'},
+            {'city': 'Dubai', 'code': 'ae'},
+            {'city': 'Ankara', 'code': 'tr'},
+            {'city': 'Istanbul', 'code': 'tr'},
+            {'city': 'Helsinki', 'code': 'fi'},
+            {'city': 'Moscow', 'code': 'ru'},
+            {'city': 'Mumbai', 'code': 'in'},
+            {'city': 'Kathmandu', 'code': 'np'},
+            {'city': 'Bangkok', 'code': 'th'},
+            {'city': 'Jakarta', 'code': 'id'},
+            {'city': 'Melbourne', 'code': 'au'},
+            {'city': 'Xianggaang', 'code': 'cn'}#,
+            #{'city': 'Shanghai', 'code': 'cn'},
+            #{'city': 'Ulaanbaator', 'code': 'mn'},
+            #{'city': 'Irkutsk', 'code': 'ru'},
+            #{'city': 'Tokyo', 'code': 'jp'},
+            #{'city': 'Sydney', 'code': 'au'},
+            #{'city': 'Christchurch', 'code': 'nz'}
+        ]
+
+    def getNewsCountryCity(self, city, country_code):
+        (lat, long) = self.getCoords(country_code, city)
+        ''' returns a list of news articles '''
+        headers = { 'Ocp-Apim-Subscription-Key': self.news_sub_key }
+        params = { 'q': city, 'count': 5 }
+        r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/search',
+            headers=headers,
+            params=params)
+        if r.status_code != 200:
+            print "error calling news: {}".format(r.status_code)
+            return
+        json_news = r.json()['value']
+        news_list = [News(j['name'], j['url'], j['description'], j['datePublished'], location=city, lat=lat, long=long) for j in json_news]
+        return news_list
 
     def getNewsCountry(self, country_code):
         country = self.getCountry(country_code)
@@ -125,6 +179,17 @@ class Processor(object):
                 code_to_countries[code] = country
         return code_to_countries
 
+    def getCityCoordsFromFile(self):
+        coords = {}
+        with open('worldcitiespop.txt') as tsv:
+            for line in csv.reader(tsv, delimiter=','):
+                code = line[0].strip()
+                city = line[2].strip()
+                lat = line[5]
+                long = line[6]
+                coords[(code, city)] = (line[5], line[6])
+        return coords
+
     def getCoordsFromFile(self):
         code_to_coords = {}
         with open('worldcitiespop.txt') as tsv:
@@ -146,12 +211,15 @@ class Processor(object):
         '''Returns (latitude, longitude) within the given country'''
         return self.code_to_coords[code]
 
+    def getCoords(self, code, city):
+        '''Returns (latitude, longitude) within the given country'''
+        return self.codecity_to_coords[(code, city)]
+
     def calculate(self):
         news = []
-        for c in self.countryList:
-            news += self.getNewsCountry(c)
+        for obj in self.cityList:
+            news += self.getNewsCountryCity(obj['city'], obj['code'])
+            print "got news for {}".format(obj['city'])
         self.addSentiments(news)
         # magical clustering
         self.writeToFile(news)
-
-
