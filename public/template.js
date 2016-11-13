@@ -1182,7 +1182,49 @@ var map = AmCharts.makeChart( "chartdiv", {
       "longitude": 10.1761
     } ]
   },
+  "listeners": [ {
+    "event": "clickMapObject",
+    "method": function( event ) {
+      console.dir(event.mapObject);
+      $('[aria-label="' + event.mapObject.title + ' "]').attr({
+          "data-toggle" : event.mapObject.title,
+          "title" : event.mapObject.title,
+          "data-content" : "Some content inside the popover"
+      });
+      $('[data-toggle="'+ event.mapObject.title +'"]').popover("show");
+      console.dir($('[data-toggle="'+ event.mapObject.title +'"]'));
+      // // deselect the area by assigning all of the dataProvider as selected object
+      // map.selectedObject = map.dataProvider;
+
+      // // toggle showAsSelected
+      // event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
+
+      // // bring it to an appropriate color
+      // map.returnInitialColor( event.mapObject );
+
+      // // let's build a list of currently selected states
+      // var states = [];
+      // for ( var i in map.dataProvider.areas ) {
+      //   var area = map.dataProvider.areas[ i ];
+      //   if ( area.showAsSelected ) {
+      //     states.push( area.title );
+      //   }
+      // }
+    }
+  } ],
   "export": {
-    "enabled": true
+    "enabled": false
   }
 } );
+
+$( document ).ready(function() {
+    map.dataProvider.images.forEach(function (el) {
+      $('[aria-label="' + el.title + ' "]').attr({
+          "data-toggle" : el.title,
+          "title" : el.title,
+          "data-content" : "Some content inside the popover"
+      });
+      $('[data-toggle="'+ el.title +'"]').popover();
+    });
+    $('[data-toggle="popover"]').popover();
+});
