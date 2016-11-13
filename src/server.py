@@ -2,6 +2,7 @@ from calcthread import CalcThread
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from threading import Lock
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -20,8 +21,7 @@ def get_events():
     with lock:
         with open('events_write.txt', 'r') as f:
             for line in f:
-                print line
-                news.append(line)
+                news.append(json.loads(line))
     return str(news)
 
 def start_calc():
