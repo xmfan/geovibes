@@ -1,1 +1,1 @@
-server: python src/server.py
+server: gunicorn src.server:app

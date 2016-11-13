@@ -24,8 +24,13 @@ def get_events():
                 news.append(line)
     return str(news)
 
-if __name__ == "__main__":
-    print "hello i started"
+def start_calc():
+    print "threads started"
     thread = CalcThread(lock)
     thread.start()
+
+app.before_first_request(start_calc)
+
+if __name__ == "__main__":
+    print "hello i started"
     app.run()
