@@ -163,7 +163,6 @@ class Processor(object):
 
     def writeToFile(self, news):
         with self.lock:
-            open('events_write.txt', 'w').close()
             with open('events_write.txt', 'w') as f:
                 for n in news:
                     json.dump(n.__dict__, f)
