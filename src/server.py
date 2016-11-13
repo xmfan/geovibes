@@ -17,7 +17,7 @@ def hello():
 @app.route("/events", methods=['GET'])
 @cross_origin()
 def get_events():
-    js = '{ \'response\': ['
+    js = '{ "response": ['
     with lock:
         with open('events_write.txt', 'r') as f:
             for line in f:

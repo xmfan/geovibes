@@ -24,7 +24,7 @@ class CalcThread(Thread):
     def run(self):
         while True:
             self.processor.calculate()
-            time.sleep(10)
+            time.sleep(1000)
 
 class Processor(object):
     '''
@@ -41,14 +41,11 @@ class Processor(object):
         time
     '''
     def __init__(self, lock):
-        self.news_sub_key = '782e68122d8742c091f6dee73fc2d270'
+        self.news_sub_key = '305dc95e236544168d39b8d0549a8725'
         self.text_sub_key = '7b20e9c1ffa8470cab2e3b6245148cf6'
         self.cities = set()
         self.lock = lock
         self.cities = self.getCitiesFromFile()
-
-        self.news_json_read = {}
-        self.news_json_write = {}
 
     def getNews(self):
         ''' returns a list of news articles '''
@@ -145,6 +142,7 @@ class Processor(object):
 
     def writeToFile(self, news):
         with self.lock:
+            open('events_write.txt', 'w').close()
             with open('events_write.txt', 'w') as f:
                 for n in news:
                     json.dump(n.__dict__, f)
