@@ -17,12 +17,13 @@ def hello():
 @app.route("/events", methods=['GET'])
 @cross_origin()
 def get_events():
-    news = []
+    js = '['
     with lock:
         with open('events_write.txt', 'r') as f:
             for line in f:
-                news.append(json.loads(line))
-    return str(news)
+                js += str(line) + ','
+    js += ']'
+    return js
 
 def start_calc():
     print "threads started"

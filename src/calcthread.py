@@ -148,6 +148,7 @@ class Processor(object):
             with open('events_write.txt', 'w') as f:
                 for n in news:
                     json.dump(n.__dict__, f)
+                    f.write('\n')
         return
 
     def calculate(self):
