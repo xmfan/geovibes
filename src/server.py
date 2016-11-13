@@ -25,6 +25,7 @@ def get_events():
     return str(news)
 
 if __name__ == "__main__":
+    print "hello i started"
     thread = CalcThread(lock)
     thread.start()
     app.run()
