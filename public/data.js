@@ -3,18 +3,48 @@ var article_map = new Map();
 
 $(function() {
   initMap();
-  $("#chartdiv").on('click', function() {
-    hideNewsPanel();
-  });
+
+  var drag = false;
+  $("#chartdiv").mousedown(function() {
+    drag = true
+  })
+  .mouseup(function() {
+    drag = false;
+  })
+  .mousemove(function() {
+    if (drag == true) $("#news-panel").hide();
+  })
+
+  setInterval(periodicDataPull, 3000);
 });
 
+function periodicDataPull() {
+  $.get("http://10.8.86.139:5000/events", function(res) {
+    articles_array = JSON.parse(res).response;
+    map.dataProvider = {
+        "map": "worldLow",
+        "images": generateImages(articles_array)
+    }
+    map.validateData();
+
+    $('a[title="Interactive JavaScript maps"]').remove(); // remove watermark
+  })
+  .fail(function() { console.log('failed to update') })
+}
+
 function initMap() {
-  $.get('sample.js'/*"http://10.8.86.139:5000/events"*/, function(res) {
-    // articles_array = JSON.parse(res).response;
-    articles_array = data.response;
+  $.get("http://10.8.86.139:5000/events", function(res) {
+    articles_array = JSON.parse(res).response;
     generateMap(generateImages(articles_array));
     $('a[title="Interactive JavaScript maps"]').remove(); // remove watermark
-  });
+  })
+  .fail(function() {
+    $.get('sample.js', function(res) {
+      articles_array = data.response;
+      generateMap(generateImages(articles_array));
+      $('a[title="Interactive JavaScript maps"]').remove(); // remove watermark
+    });;
+  })
 }
 
 function generateImages(articles) {
@@ -23,13 +53,18 @@ function generateImages(articles) {
   for (var i in articles) {
     var article = articles[i];
 
+    console.log(article.lat + ' ' + article.long);
+    var lat = article.lat; //+ Math.random();
+    var lng = article.long; //+ Math.random();
+    console.log(article.lat + ' ' + article.long);
+
     images.push({
       "svgPath": targetSVG,
       "zoomLevel": 5,
       "scale": 0.5,
       "title": article.name,
-      "latitude": article.lat,
-      "longitude": article.long
+      "latitude": lat,
+      "longitude": lng
     });
 
     article_map.set(article.name, article);
@@ -47,7 +82,7 @@ function generateMap(images) {
       "rollOverColor": "#089282",
       "rollOverScale": 3,
       "selectedScale": 3,
-      "selectedColor": "#089282",
+      "selectedColor": "red",
       "color": "#13564e"
     },
     "areasSettings": {
@@ -83,17 +118,15 @@ function generateHTML(title) {
   var article = article_map.get(title);
 
   var template =
-  '<h1><a href=' + article.url + ' target="_blank">' + article.name + '</a></h1>' +
-  '<h2>' + article.location + ', ' + new Date(article.datePublished) + '</h2>' +
-  '<p>' + article.description + '</p>'
+  '<h1><a href=' + article.url + ' target="_blank">' + article.name + '</a></h1><hr>' +
+  '<h2>' + article.location + ', ' + parseDate(article.datePublished) + '</h2>' +
+  '<p>' + article.description + '<br><br><a href=' + article.url + ' target="_blank">[Read more]</a></p>'
 
   $('#news-panel').html(template);
+  $('#news-panel').show();
 }
 
-function showNewsPanel() {
-
-}
-
-function hideNewsPanel() {
-
+function parseDate(date) {
+  var date_array = String(new Date(date)).split(' ');
+  return date_array[0] + ' ' + date_array[1] + ' ' + date_array[2];
 }
