@@ -17,12 +17,12 @@ def hello():
 @app.route("/events", methods=['GET'])
 @cross_origin()
 def get_events():
-    js = '['
+    js = '{ \'response\': ['
     with lock:
         with open('events_write.txt', 'r') as f:
             for line in f:
                 js += str(line) + ','
-    js += ']'
+    js += ']}'
     return js
 
 def start_calc():
