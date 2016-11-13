@@ -81,5 +81,15 @@ KEY PHRASES:
 #
 #r = requests.post('https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases', json = payload, headers=headers)
 #print r.json()['documents']
-r = requests.get('http://127.0.0.1:5000/events')
-print r.content
+#r = requests.get('http://127.0.0.1:5000/events')
+#print r.content
+
+country = 'United States'
+(lat, long) = (0,1)
+headers = { 'Ocp-Apim-Subscription-Key': '305dc95e236544168d39b8d0549a8725' }
+params = { 'q': country }
+r = requests.get('https://api.cognitive.microsoft.com/bing/v5.0/news/search',
+        headers=headers,
+        params=params)
+print r
+print r.json()['value']
