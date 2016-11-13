@@ -1,4 +1,4 @@
-var data;
+var articles_array;
 var article_map = new Map();
 
 $(function() {
@@ -15,7 +15,7 @@ $(function() {
     if (drag == true) $("#news-panel").hide();
   })
 
-  setInterval(periodicDataPull, 3000);
+  setInterval(periodicDataPull, 30000);
 });
 
 function periodicDataPull() {
@@ -52,11 +52,8 @@ function generateImages(articles) {
 
   for (var i in articles) {
     var article = articles[i];
-
-    console.log(article.lat + ' ' + article.long);
-    var lat = article.lat; //+ Math.random();
-    var lng = article.long; //+ Math.random();
-    console.log(article.lat + ' ' + article.long);
+    var lat = article.lat + random();
+    var lng = article.long + random();
 
     images.push({
       "svgPath": targetSVG,
@@ -129,4 +126,13 @@ function generateHTML(title) {
 function parseDate(date) {
   var date_array = String(new Date(date)).split(' ');
   return date_array[0] + ' ' + date_array[1] + ' ' + date_array[2];
+}
+
+function random() {
+  return 0;
+  var higher = Math.random() > 0.5 ? true : false;
+
+  var rand = Math.round(Math.random()*1000);
+  if (higher) rand *= -1;
+  return rand;
 }
