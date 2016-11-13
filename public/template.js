@@ -24,7 +24,7 @@ var targetSVG = "M9,0C4.029,0,0,4.029,0,9s4.029,9,9,9s9-4.029,9-9S13.971,0,9,0z 
 //     "outlineThickness": 0.1
 //   },
 //
-//   "dataProvider": {
+  // "dataProvider": {
 //     "map": "worldLow",
 //     "images": [ {
 //       "svgPath": targetSVG,
