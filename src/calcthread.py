@@ -138,7 +138,7 @@ class Processor(object):
 
     def getCitiesFromFile(self):
         cities = set()
-        with open('../scripts/cities.txt', 'r') as f:
+        with open('scripts/cities.txt', 'r') as f:
             for line in f:
                 cities.add(line.strip())
         return cities
